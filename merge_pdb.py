@@ -19,7 +19,7 @@ for filename in filenames:
                 line.replace("OC1","OXT")
                 line.replace("OC2","O")
 
-                tokens = [line[:6], line[6:11], line[12:16], line[17:20], line[21:22], line[30:38], line[38:46], line[46:54]]
+                tokens = [line[:6], line[6:11], line[12:16], line[17:20], line[21:22], line[22:26], line[30:38], line[38:46], line[46:54]]
 
                 if "OXT" in line:
                     oxt = tokens[:]
@@ -43,10 +43,7 @@ for filename in filenames:
         last_names = atomlines[:,1]
     print "MODEL",c
     for line in atomlines:
-        if has_chain:
-            print "{:<6}{:>5} {:<4}{:<3}{:1}{:>4} {:>8}{:>8}{:>8}".format(*line)
-        else:
-            print "{:<6}{:>5} {:<4}{:<3} {:>4} {:>8}{:>8}{:>8}".format(*line)
+        print "{:<6}{:>5} {:<4}{:<3}{:1}{:>4} {:>8}{:>8}{:>8}".format(*line)
     print "TER"
     print "ENDMDL"
 
