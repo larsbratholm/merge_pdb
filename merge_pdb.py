@@ -13,6 +13,7 @@ for filename in filenames:
     oxt = None
     with open(filename) as f:
         for line in f.readlines():
+            line = line[:56]
             if line.startswith("ATOM"):
                 # to make sure oxt is last
                 line.replace("OC1","OXT")
@@ -30,6 +31,7 @@ for filename in filenames:
         oxt = np.asarray(oxt)
 
     order = np.lexsort((atomlines[:,2],atomlines[:,4].astype(int)))
+
     atomlines = atomlines[order]
     atomlines[:,numindex] = (np.arange(atomlines.shape[0]) + 1).astype(str)
     if oxt != None:
