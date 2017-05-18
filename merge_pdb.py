@@ -30,7 +30,7 @@ for filename in filenames:
     if oxt != None:
         oxt = np.asarray(oxt)
 
-    order = np.lexsort((atomlines[:,2],atomlines[:,4].astype(int)))
+    order = np.lexsort((atomlines[:,2],atomlines[:,5].astype(int)))
 
     atomlines = atomlines[order]
     atomlines[:,numindex] = (np.arange(atomlines.shape[0]) + 1).astype(str)
