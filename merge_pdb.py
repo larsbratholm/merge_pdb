@@ -19,7 +19,7 @@ for filename in filenames:
                 line.replace("OC1","OXT")
                 line.replace("OC2","O")
 
-                tokens = [line[:6], line[6:11], line[17:20], line[21:22], line[30:38], line[38:46], line[46:54]]
+                tokens = [line[:6], line[6:11], line[12:16], line[17:20], line[21:22], line[30:38], line[38:46], line[46:54]]
 
                 if "OXT" in line:
                     oxt = tokens[:]
