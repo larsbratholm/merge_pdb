@@ -87,7 +87,7 @@ for filename in filenames:
 
 
     atomlines[:,1] = (np.arange(atomlines.shape[0]) + 1).astype(str)
-    if oxt != None:
+    if len(oxt) > 0:
         oxt[1] = str(atomlines.shape[0] + 1)
         atomlines = np.concatenate([atomlines, oxt[None,:]])
     if last_names != None:
