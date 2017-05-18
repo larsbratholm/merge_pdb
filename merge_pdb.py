@@ -17,32 +17,28 @@ for filename in filenames:
                 # to make sure oxt is last
                 line.replace("OC1","OXT")
                 line.replace("OC2","O")
+
+                tokens = [line[:6], line[6:11], line[17:20], line[21:22], line[30:38], line[38:46], line[46:54]]
+
                 if "OXT" in line:
-                    oxt = line.split()
+                    oxt = tokens[:]
                 else:
-                    atomlines.append(line.split())
+                    atomlines.append(tokens[:])
 
     atomlines = np.asarray(atomlines)
     if oxt != None:
         oxt = np.asarray(oxt)
-    atomindex = np.where(atomlines == "CA")[1][0]
-    numindex = atomindex - 1
-    # check if there's chain identifier
-    try:
-        resindex = int(atomindex + 2)
-        has_chain = False
-    except:
-        resindex = atomindex + 3
-        has_chain = True
 
-    order = np.lexsort((atomlines[:,atomindex],atomlines[:,resindex].astype(int)))
+    order = np.lexsort((atomlines[:,2],atomlines[:,4].astype(int)))
     atomlines = atomlines[order]
     atomlines[:,numindex] = (np.arange(atomlines.shape[0]) + 1).astype(str)
     if oxt != None:
-        oxt[numindex] = str(atomlines.shape[0] + 1)
+        oxt[1] = str(atomlines.shape[0] + 1)
         atomlines = np.concatenate([atomlines, oxt[None,:]])
     if last_names != None:
-        assert(atomlines[atomindex] == last_names)
+        assert(atomlines[:,1] == last_names)
+    else:
+        last_names = atomlines[:,1]
     print "MODEL",c
     for line in atomlines:
         if has_chain:
