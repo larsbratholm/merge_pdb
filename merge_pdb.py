@@ -34,7 +34,7 @@ for filename in filenames:
     c += 1
     atomlines = []
     last_names = None
-    oxt = None
+    oxt = []
     with open(filename) as f:
         for line in f.readlines():
             line = line[:56]
@@ -51,11 +51,9 @@ for filename in filenames:
                     oxt = tokens[:]
                 else:
                     atomlines.append(tokens[:])
-    print len(atomlines[0])
 
     atomlines = np.asarray(atomlines)
-    print atomlines[0].shape
-    if oxt != None:
+    if len(oxt) > 0 :
         oxt = np.asarray(oxt)
 
     last_resid = -99999999
