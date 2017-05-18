@@ -44,6 +44,8 @@ for filename in filenames:
                 line.replace("OC2","O  ")
 
                 tokens = [line[:6].strip(), line[6:11].strip(), line[12:16].strip(), line[17:20].strip(), line[21:22].strip(), line[22:26].strip(), line[30:38].strip(), line[38:46].strip(), line[46:54].strip()]
+                if len(tokens[2]) != 4:
+                    tokens[2] = " " + tokens[2]
 
                 if "OXT" in line:
                     oxt = tokens[:]
@@ -94,7 +96,7 @@ for filename in filenames:
         last_names = atomlines[:,1]
     print "MODEL",c
     for line in atomlines:
-        print "{:<6}{:>5} {:<4}{:<3}{:1}{:>4} {:>8}{:>8}{:>8}".format(*line)
+        print "{:<6}{:>5}{:<4}{:<3}{:1}{:>4}{:>8}{:>8}{:>8}".format(*line)
     print "TER"
     print "ENDMDL"
 
