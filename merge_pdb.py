@@ -33,7 +33,7 @@ for filename in filenames:
     order = np.lexsort((atomlines[:,2],atomlines[:,5].astype(int)))
 
     atomlines = atomlines[order]
-    atomlines[:,numindex] = (np.arange(atomlines.shape[0]) + 1).astype(str)
+    atomlines[:,1] = (np.arange(atomlines.shape[0]) + 1).astype(str)
     if oxt != None:
         oxt[1] = str(atomlines.shape[0] + 1)
         atomlines = np.concatenate([atomlines, oxt[None,:]])
