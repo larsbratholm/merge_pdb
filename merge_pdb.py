@@ -51,8 +51,10 @@ for filename in filenames:
                     oxt = tokens[:]
                 else:
                     atomlines.append(tokens[:])
+    print len(atomlines[0])
 
     atomlines = np.asarray(atomlines)
+    print atomlines[0].shape
     if oxt != None:
         oxt = np.asarray(oxt)
 
@@ -96,7 +98,9 @@ for filename in filenames:
         last_names = atomlines[:,1]
     print "MODEL",c
     for line in atomlines:
-        print "{:<6s}{:>5s}{:<4s}{:<3s}{:1s}{:>4s}{:>8s}{:>8s}{:>8s}".format(*line)
+        print line
+        print "{:<6s}{:>5s} {:<4s} {:<3s} {:1s}{:>4s}    {:>8s}{:>8s}{:>8s}".format(*line)
+        quit()
     print "TER"
     print "ENDMDL"
 
