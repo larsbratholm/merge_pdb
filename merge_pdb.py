@@ -13,14 +13,25 @@ for filename in filenames:
     oxt = None
     with open(filename) as f:
         for line in f.readlines():
+            line = line[:56]
             if line.startswith("ATOM"):
                 # to make sure oxt is last
                 line.replace("OC1","OXT")
                 line.replace("OC2","O")
+                tokens = line.split()
+                # check if something is wrong with the coordinates
+                xyz = tokens[-3:]
+                n = sum(["." in i for i in xyz])
+                if n < 3:
+                    tokens = tokens[:-3] + [line[22:26]] + tokens[-3:]
+                    tokens[-3] = line[30:38]
+                    tokens[-2] = line[38:46]
+                    tokens[-1] = line[46:54]
+
                 if "OXT" in line:
-                    oxt = line.split()
+                    oxt = tokens[:]
                 else:
-                    atomlines.append(line.split())
+                    atomlines.append(tokens[:])
 
     atomlines = np.asarray(atomlines)
     if oxt != None:
@@ -31,7 +42,7 @@ for filename in filenames:
     try:
         resindex = int(atomindex + 2)
         has_chain = False
-    except:
+    except TypeError:
         resindex = atomindex + 3
         has_chain = True
 
