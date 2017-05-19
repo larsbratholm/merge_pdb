@@ -28,7 +28,7 @@ ordering = {
             "TYR": dict([(j,i) for i,j in list(enumerate(["N","CA","C","O","CB","CG","CD1","CD2","CE1","CE2","CZ","OH"]))]),
             "VAL": dict([(j,i) for i,j in list(enumerate(["N","CA","C","O","CB","CG1","CG2"]))])
             }
-
+mse_to_met = True
 c = 0
 for filename in filenames:
     c += 1
@@ -37,11 +37,13 @@ for filename in filenames:
     oxt = []
     with open(filename) as f:
         for line in f.readlines():
-            line = line[:56]
             if line.startswith("ATOM"):
                 # to make sure oxt is last
-                line.replace("OC1","OXT")
-                line.replace("OC2","O  ")
+                line = line.replace("OC1","OXT")
+                line = line.replace("OC2","O  ")
+                if mse_to_met and "MSE" in line:
+                    line = line.replace("MSE","MET")
+                    line = line.replace("SE","SD")
 
                 tokens = [line[:6].strip(), line[6:11].strip(), line[12:16].strip(), line[17:20].strip(), line[21:22].strip(), line[22:26].strip(), line[30:38].strip(), line[38:46].strip(), line[46:54].strip()]
                 if len(tokens[2]) != 4:
@@ -56,8 +58,7 @@ for filename in filenames:
     if len(oxt) > 0 :
         oxt = np.asarray(oxt)
 
-    last_resid = -99999999
-    id_counter = 0
+    last_resid = atomlines[0,2]
     for i, line in enumerate(atomlines):
         resid = line[5]
         aa = line[3]
@@ -69,21 +70,22 @@ for filename in filenames:
                 order.append(99)
             size = len(ordering[aa])
             sorted_order = np.argsort(order)
-            atomlines[i-id_counter:] = atomlines[i-id_counter:][sorted_order]
-        elif last_resid == resid:
-            id_counter += 1
-            if atom in ordering[aa]:
-                order.append(ordering[aa][atom])
-            else: # hydrogens
-                order.append(99)
-        else:
+            n = len(order)
+            atomlines[i-n+1:] = atomlines[i-n+1:][sorted_order]
+        elif last_resid != resid:
             size = len(ordering[aa])
             last_resid = resid
             if i != 0:
                 sorted_order = np.argsort(order)
-                atomlines[i-id_counter:i] = atomlines[i-id_counter:i][sorted_order]
+                n = len(order)
+                atomlines[i-n:i] = atomlines[i-n:i][sorted_order]
             order = []
             id_counter = 0
+
+        if atom in ordering[aa]:
+            order.append(ordering[aa][atom])
+        else: # hydrogens
+            order.append(99)
 
 
     atomlines[:,1] = (np.arange(atomlines.shape[0]) + 1).astype(str)
