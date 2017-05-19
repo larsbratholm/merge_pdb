@@ -96,6 +96,10 @@ for filename in filenames:
         assert(atomlines[:,1] == last_names)
     else:
         last_names = atomlines[:,1]
+    # center the structure
+    xyz = atomlines[:,-3:].astype(float)
+    xyz -= xyz.mean(0)
+    atomlines[:,-3:] = np.asarray([['%.3f' % i for i in x] for x in xyz], dtype=str)
     print "MODEL",c
     for line in atomlines:
         print "{:<6s}{:>5s} {:<4s} {:<3s} {:1s}{:>4s}    {:>8s}{:>8s}{:>8s}".format(*line)
